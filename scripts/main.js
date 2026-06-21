@@ -10,7 +10,7 @@
      --------------------------------------------------------------- */
   // Google Apps Script web app URL (see backend/SETUP.md).
   // Empty string = backend not connected, the form runs in demo mode.
-  var RSVP_ENDPOINT = "";
+  var RSVP_ENDPOINT = "https://script.google.com/macros/s/AKfycbwCydr_mmS4g2u8XyMkvn8sho-JBBhentxk_WK219Cjd2rP92rCPEipoO6ybgtrRC0/exec";
 
   /* ---------------------------------------------------------------
      1. Countdown to the wedding day (12 Sep 2026, 12:30, Minsk UTC+3)
