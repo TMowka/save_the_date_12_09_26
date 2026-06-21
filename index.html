@@ -130,7 +130,13 @@
             </tbody>
           </table>
         </figure>
-        <button type="button" class="btn calendar-cta" id="add-to-calendar">Добавить в календарь</button>
+        <div class="calendar-cta">
+          <button type="button" class="btn" id="add-to-calendar" aria-haspopup="true" aria-expanded="false" aria-controls="calendar-options">Добавить в календарь</button>
+          <div class="calendar-options" id="calendar-options" hidden>
+            <a class="calendar-options__item" id="cal-google" href="#" target="_blank" rel="noopener">Google Календарь</a>
+            <button type="button" class="calendar-options__item" id="cal-apple">Apple / другой (.ics)</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -393,9 +399,9 @@
     <!-- ========================== CLOSING ========================== -->
     <section class="section closing center" aria-labelledby="closing-title">
       <div class="container container--narrow">
-        <h2 id="closing-title" class="closing__title">До встречи!<br>Ваши Настя и Тима <span class="heart">❤</span></h2>
         <figure class="framed-band reveal">
           <img src="assets/images/couple.jpg" alt="Настя и Тима, чёрно-белое фото в поле" width="800" height="461" loading="lazy" decoding="async">
+          <figcaption id="closing-title" class="closing__title">До встречи!<br>Ваши Настя и Тима <span class="heart">❤</span></figcaption>
         </figure>
       </div>
     </section>

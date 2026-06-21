@@ -289,12 +289,31 @@
   }
 
   /* ---------------------------------------------------------------
-     5. "Add to calendar": download a dependency-free .ics file.
+     5. "Add to calendar": a button reveals two options —
+        a Google Calendar link (opens the prefilled event, no file —
+        works on Android/Chrome) and an .ics download (Apple, Outlook).
         12 Sep 2026, 12:30–23:00 Minsk (UTC+3) → written in UTC.
      --------------------------------------------------------------- */
   function initAddToCalendar() {
     var btn = document.getElementById("add-to-calendar");
     if (!btn) return;
+    var menu = document.getElementById("calendar-options");
+    var googleLink = document.getElementById("cal-google");
+    var icsBtn = document.getElementById("cal-apple");
+
+    var START = "20260912T093000Z";
+    var END = "20260912T200000Z";
+    var TITLE = "Свадьба Насти и Тимы";
+    var LOCATION = "Усадьба Grand Chalet, д. Большие Новосёлки, ул. Садовая, д. 37Б";
+    var DETAILS = "12:30 — регистрация в ЗАГСе (по желанию)\n16:00 — церемония\n16:30 — банкет";
+
+    if (googleLink) {
+      googleLink.href = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+        "&text=" + encodeURIComponent(TITLE) +
+        "&dates=" + START + "/" + END +
+        "&details=" + encodeURIComponent(DETAILS) +
+        "&location=" + encodeURIComponent(LOCATION);
+    }
 
     var ics = [
       "BEGIN:VCALENDAR",
@@ -304,26 +323,51 @@
       "BEGIN:VEVENT",
       "UID:wedding-2026-09-12-nastya-tima@tmowka",
       "DTSTAMP:20260101T000000Z",
-      "DTSTART:20260912T093000Z",
-      "DTEND:20260912T200000Z",
-      "SUMMARY:Свадьба Насти и Тимы",
-      "LOCATION:Усадьба Grand Chalet\\, д. Большие Новосёлки\\, ул. Садовая\\, д. 37Б",
-      "DESCRIPTION:12:30 — регистрация в ЗАГСе (по желанию)\\n16:00 — церемония\\n16:30 — банкет\\nУсадьба Grand Chalet",
+      "DTSTART:" + START,
+      "DTEND:" + END,
+      "SUMMARY:" + TITLE,
+      "LOCATION:" + LOCATION.replace(/,/g, "\\,"),
+      "DESCRIPTION:" + DETAILS.replace(/\n/g, "\\n"),
       "GEO:53.740722;27.124639",
       "END:VEVENT",
       "END:VCALENDAR"
     ].join("\r\n");
 
+    function closeMenu() {
+      if (!menu) return;
+      menu.hidden = true;
+      btn.setAttribute("aria-expanded", "false");
+    }
+
     btn.addEventListener("click", function () {
-      var blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = "svadba-nastya-tima.ics";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      if (!menu) return;
+      var willOpen = menu.hidden;
+      menu.hidden = !willOpen;
+      btn.setAttribute("aria-expanded", String(willOpen));
+    });
+
+    if (icsBtn) {
+      icsBtn.addEventListener("click", function () {
+        var blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "svadba-nastya-tima.ics";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        closeMenu();
+      });
+    }
+    if (googleLink) googleLink.addEventListener("click", closeMenu);
+
+    // Close when clicking outside the widget or pressing Escape.
+    document.addEventListener("click", function (e) {
+      if (menu && !menu.hidden && !btn.parentNode.contains(e.target)) closeMenu();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenu();
     });
   }
 
