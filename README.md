@@ -67,9 +67,10 @@ save_the_date_12_09_26/
 
 ## Notes
 
-- **RSVP has no backend** — submission is simulated client-side. To make it live,
-  replace the `submit()` stub in `scripts/main.js` with a `fetch()` POST of the
-  `payload` (e.g. Formspree, a Google Apps Script, or your own API). A honeypot
+- **RSVP backend** — the form posts to a Google Apps Script web app that emails
+  the submission and appends it to a Google Sheet. Configure the endpoint via
+  `RSVP_ENDPOINT` in `scripts/main.js` (empty string = demo mode, submits
+  nowhere). Setup steps in [`backend/SETUP.md`](backend/SETUP.md). A honeypot
   field (`company`) blocks basic spam bots.
 - **`og:image` is a relative path.** Social scrapers need absolute URLs — set the
   production domain (e.g. `https://your-domain/assets/images/couple.jpg`) before sharing.

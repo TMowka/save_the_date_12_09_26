@@ -1,74 +1,76 @@
-# RSVP-бэкенд на Google Apps Script
+# RSVP backend on Google Apps Script
 
-Форма со свадебного сайта отправляется в Google Apps Script, который
-**дописывает строку в Google-таблицу** и **присылает письмо** с анкетой.
-Сервер свой держать не нужно — работает при любом хостинге статики.
+The RSVP form on the wedding site posts to a Google Apps Script web app that
+**appends a row to a Google Sheet** and **emails you** the submission. No server
+to run — it works regardless of where the static site is hosted.
 
-## Что понадобится
+## What you need
 
-- Google-аккаунт (тот, на чью почту хотите получать заявки).
+- A Google account (the one that should receive the submissions).
 
-## Шаги
+## Steps
 
-### 1. Создать таблицу
+### 1. Create a spreadsheet
 
-1. Открой [sheets.new](https://sheets.new) — создастся пустая Google-таблица.
-2. Назови её, например, «RSVP — Настя & Тима». Лист `RSVP` и заголовки
-   скрипт создаст сам при первой заявке.
+1. Open [sheets.new](https://sheets.new) — this creates an empty Google Sheet.
+2. Name it, e.g. "RSVP — Nastya & Tima". The `RSVP` tab and its header row are
+   created automatically on the first submission.
 
-### 2. Вставить скрипт
+### 2. Add the script
 
-1. В таблице: **Расширения → Apps Script**.
-2. Удали содержимое файла `Code.gs` и вставь код из
+1. In the spreadsheet: **Extensions → Apps Script**.
+2. Delete the contents of `Code.gs` and paste the code from
    [`backend/Code.gs`](./Code.gs).
-3. Вверху файла впиши свою почту в `NOTIFY_EMAIL`.
-4. Сохрани (Ctrl/Cmd+S).
+3. At the top of the file, set your address in `NOTIFY_EMAIL`.
+4. Save (Ctrl/Cmd+S).
 
-### 3. Опубликовать как веб-приложение
+### 3. Deploy as a web app
 
-1. **Деплой → Новый деплой** (значок ⚙️ → «Веб-приложение»).
-2. Настройки:
-   - **Описание** — любое.
-   - **Запуск от имени** — *От моего имени*.
-   - **У кого есть доступ** — **Все** (*Anyone*). ⚠️ Обязательно, иначе
-     сайт получит ошибку доступа.
-3. Нажми **Развернуть**. Google попросит разрешения
-   (отправка почты + доступ к таблице) — подтверди их для своего аккаунта.
-4. Скопируй **URL веб-приложения** — он вида
+1. **Deploy → New deployment** (the ⚙️ icon → "Web app").
+2. Settings:
+   - **Description** — anything.
+   - **Execute as** — *Me*.
+   - **Who has access** — **Anyone**. ⚠️ Required, otherwise the site gets an
+     access error.
+3. Click **Deploy**. Google will ask for permissions (send email + access the
+   spreadsheet) — approve them for your account.
+4. Copy the **Web app URL** — it looks like
    `https://script.google.com/macros/s/XXXX/exec`.
 
-### 4. Подключить к сайту
+### 4. Connect it to the site
 
-В [`scripts/main.js`](../scripts/main.js) впиши скопированный URL в начало файла:
+In [`scripts/main.js`](../scripts/main.js), put the copied URL near the top of
+the file:
 
 ```js
 var RSVP_ENDPOINT = "https://script.google.com/macros/s/XXXX/exec";
 ```
 
-Пустая строка = демо-режим (форма «отправляется», но никуда не уходит).
+An empty string = demo mode (the form "submits" but goes nowhere).
 
-> Если используешь сборку (`npm run build`) — не забудь пересобрать `dist`,
-> там лежит своя копия `scripts/main.js`.
+> Commit and push — Cloudflare Pages rebuilds the site automatically. (If you
+> build locally with `npm run build`, the `dist/` copy is regenerated from
+> source, so there is nothing to edit there by hand.)
 
-### 5. Проверить
+### 5. Verify
 
-Открой сайт, заполни форму, отправь. Должно произойти:
-- новая строка в таблице (дата + все поля);
-- письмо на `NOTIFY_EMAIL` с темой `RSVP: <имя>`.
+Open the site, fill in the form, submit. You should get:
+- a new row in the spreadsheet (timestamp + all fields);
+- an email to `NOTIFY_EMAIL` with the subject `RSVP: <name>`.
 
-## Как это устроено (для отладки)
+## How it works (for debugging)
 
-- Сайт шлёт `POST` с телом `text/plain` (JSON-строка) и `mode: "no-cors"`.
-  Так браузер не делает CORS-preflight, который Apps Script не умеет
-  обрабатывать. Минус: фронт не читает тело ответа — успехом считается сам
-  факт доставки запроса. Поэтому валидация полей делается на клиенте до
-  отправки.
-- Чекбоксы «меню» и «напитки» приходят массивом (в форме это поля с
-  одинаковым `name`); в таблице/письме они склеиваются через запятую.
-- Honeypot-поле `company` на бэкенд не отправляется (боты отсекаются на
-  клиенте).
+- The site sends a `POST` with a `text/plain` body (a JSON string) and
+  `mode: "no-cors"`. This avoids the CORS preflight that Apps Script can't
+  handle. Trade-off: the front end can't read the response body — success means
+  the request was delivered. That's why field validation runs on the client
+  before sending.
+- The "menu" and "drinks" checkboxes arrive as arrays (they are fields that
+  share a `name`); in the sheet/email they are joined with commas.
+- The honeypot field `company` is not sent to the backend (bots are filtered
+  on the client).
 
-## Обновление скрипта
+## Updating the script
 
-После правок в `Code.gs`: **Деплой → Управление деплоями → ✏️ → Новая
-версия → Развернуть**. URL при этом **не меняется** — трогать сайт не нужно.
+After editing `Code.gs`: **Deploy → Manage deployments → ✏️ → New version →
+Deploy**. The URL stays the same — no need to touch the site.
