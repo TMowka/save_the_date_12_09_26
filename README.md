@@ -76,4 +76,3 @@ save_the_date_12_09_26/
   production domain (e.g. `https://your-domain/assets/images/couple.jpg`) before sharing.
 - The page is `noindex,nofollow` (private invitation) — remove that meta tag if
   you want it indexed.
-```
