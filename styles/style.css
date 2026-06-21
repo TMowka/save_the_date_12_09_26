@@ -599,6 +599,9 @@ fieldset.field { margin: 0 0 1.6rem; }
 .rsvp-form[data-state="loading"] .btn__spinner { display: inline-block; }
 .rsvp-form[data-state="loading"] .btn__label { opacity: 0.8; }
 
+#rsvp-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+#rsvp-submit:disabled:hover { background: var(--accent); border-color: var(--accent); }
+
 .rsvp-success {
   margin-top: 2.5rem;
   text-align: center;

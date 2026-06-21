@@ -141,6 +141,7 @@
 
     var successPanel = document.getElementById("rsvp-success");
     var successName = document.getElementById("success-name");
+    var submitBtn = document.getElementById("rsvp-submit");
 
     function fieldWrap(el) { return el.closest(".field"); }
 
@@ -182,18 +183,31 @@
       return ok;
     }
 
-    // Live-clear errors as the guest fixes them
+    // Submit stays disabled until the name and an attendance option are given.
+    function syncSubmit() {
+      var name = form.elements["name"].value.trim();
+      var attendance = form.querySelector('input[name="attendance"]:checked');
+      submitBtn.disabled = !(name && attendance);
+    }
+
+    // Live-clear errors as the guest fixes them; keep the submit gate in sync.
     form.addEventListener("input", function (e) {
       if (e.target.name === "name" && e.target.value.trim()) {
         clearError(fieldWrap(e.target), "guest-name");
       }
+      syncSubmit();
     });
     form.addEventListener("change", function (e) {
       if (e.target.name === "attendance") {
         document.getElementById("attendance-field").classList.remove("field--invalid");
         showError("attendance", false);
       }
+      syncSubmit();
     });
+
+    // Gate the button up front (JS-only — without JS the form still submits and
+    // validate() guards on submit).
+    syncSubmit();
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
