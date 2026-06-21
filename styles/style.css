@@ -303,6 +303,8 @@ a { color: var(--accent-dark); }
   max-width: 420px;
   margin: 0.75rem auto 0;
 }
+/* the explicit display above would otherwise defeat the [hidden] attribute */
+.calendar-options[hidden] { display: none; }
 .calendar-options__item {
   display: block;
   padding: 0.7rem 1rem;
