@@ -1,0 +1,13 @@
+{
+  "name": "save-the-date-nastya-tima",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Save-the-date wedding invitation for Настя & Тима (12 Sep 2026). Static, dependency-free.",
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "build": "node build.mjs",
+    "serve:dist": "python3 -m http.server 5174 --directory dist"
+  },
+  "keywords": ["wedding", "save-the-date", "static-site"],
+  "license": "MIT"
+}

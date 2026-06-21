@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output — Cloudflare Pages rebuilds it from source on each push
+dist/
+
+# Design source material (originals + reference copy, not served by the site)
+source/
+
+# OS / editor / tooling
+.DS_Store
+.idea/
+.claude/
+*.log
