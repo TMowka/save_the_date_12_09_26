@@ -104,17 +104,18 @@
 
   /* ---------------------------------------------------------------
      3b. Attendance gate: the attending-only fields (transfer, menu,
-         allergy, drinks, wishes) stay hidden until the guest picks an
-         attending option; hidden again (and cleared) if they decline.
+         allergy, drinks, wishes) are banquet-related, so only the two
+         banquet options reveal them; the "registry only" and "can't
+         attend" options keep the block hidden (and cleared).
      --------------------------------------------------------------- */
   function initAttendanceToggle(form) {
     var block = document.getElementById("rsvp-attending");
     if (!block) return;
-    var DECLINE = "К сожалению, не смогу присутствовать";
+    var REVEALS = ["Буду в ЗАГСе и на банкете", "Буду только на банкете"];
 
     function apply() {
       var checked = form.querySelector('input[name="attendance"]:checked');
-      var attending = !!checked && checked.value !== DECLINE;
+      var attending = !!checked && REVEALS.indexOf(checked.value) > -1;
       block.hidden = !attending;
       if (attending) return;
       // Hidden (nothing chosen yet, or declined): clear so no stale choices linger.
@@ -123,9 +124,8 @@
       block.querySelectorAll("[data-conditional]").forEach(function (p) { p.hidden = true; });
     }
 
-    form.addEventListener("change", function (e) {
-      if (e.target.name === "attendance") apply();
-    });
+    // Re-evaluated on every change so a form reset (reopen) re-hides the block.
+    form.addEventListener("change", apply);
     apply();
   }
 
@@ -240,6 +240,22 @@
       });
     });
 
+    // "Fill in another form": reset everything and bring the form back.
+    var againBtn = document.getElementById("rsvp-again");
+    if (againBtn) {
+      againBtn.addEventListener("click", function () {
+        form.reset();
+        if (successPanel) successPanel.hidden = true;
+        form.hidden = false;
+        form.setAttribute("data-state", "idle");
+        // reset() fires no input/change — re-sync field visibility + submit gate.
+        form.dispatchEvent(new Event("change", { bubbles: true }));
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+        var nameEl = form.elements["name"];
+        if (nameEl) nameEl.focus();
+      });
+    }
+
     // Turns the form into a plain object. Checkboxes that share a name
     // (menu, drinks) are collected into an array via getAll(); honeypot is dropped.
     function serialize(form) {
@@ -272,10 +288,50 @@
     }
   }
 
+  /* ---------------------------------------------------------------
+     5. "Add to calendar": download a dependency-free .ics file.
+        12 Sep 2026, 12:30–23:00 Minsk (UTC+3) → written in UTC.
+     --------------------------------------------------------------- */
+  function initAddToCalendar() {
+    var btn = document.getElementById("add-to-calendar");
+    if (!btn) return;
+
+    var ics = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//nastya-tima//save-the-date//RU",
+      "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      "UID:wedding-2026-09-12-nastya-tima@tmowka",
+      "DTSTAMP:20260101T000000Z",
+      "DTSTART:20260912T093000Z",
+      "DTEND:20260912T200000Z",
+      "SUMMARY:Свадьба Насти и Тимы",
+      "LOCATION:Усадьба Grand Chalet\\, д. Большие Новосёлки\\, ул. Садовая\\, д. 37Б",
+      "DESCRIPTION:12:30 — регистрация в ЗАГСе (по желанию)\\n16:00 — церемония\\n16:30 — банкет\\nУсадьба Grand Chalet",
+      "GEO:53.740722;27.124639",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    btn.addEventListener("click", function () {
+      var blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "svadba-nastya-tima.ics";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
   /* --------------------------- bootstrap --------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
     initCountdown();
     initReveal();
     initRsvp();
+    initAddToCalendar();
   });
 })();

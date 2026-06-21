@@ -130,6 +130,7 @@
             </tbody>
           </table>
         </figure>
+        <button type="button" class="btn calendar-cta" id="add-to-calendar">Добавить в календарь</button>
       </div>
     </section>
 
@@ -278,6 +279,7 @@
             <legend>Подтвердите, пожалуйста, своё присутствие <span class="req">*</span></legend>
             <label class="choice"><input type="radio" name="attendance" value="Буду в ЗАГСе и на банкете" required> Буду в ЗАГСе и на банкете</label>
             <label class="choice"><input type="radio" name="attendance" value="Буду только на банкете"> Буду только на банкете</label>
+            <label class="choice"><input type="radio" name="attendance" value="Буду только в ЗАГСе"> Буду только в ЗАГСе</label>
             <label class="choice"><input type="radio" name="attendance" value="К сожалению, не смогу присутствовать"> К сожалению, не смогу присутствовать</label>
             <p class="field__error" data-error-for="attendance" hidden>Пожалуйста, выберите вариант.</p>
           </fieldset>
@@ -355,6 +357,7 @@
           <div class="rsvp-success__mark" aria-hidden="true">🤍</div>
           <h3>Спасибо, <span id="success-name">друзья</span>!</h3>
           <p>Ваша анкета принята. Мы очень ждём встречи с Вами!</p>
+          <button type="button" class="btn rsvp-success__again" id="rsvp-again">Заполнить ещё одну анкету</button>
         </div>
 
         <p class="note center">
@@ -390,7 +393,7 @@
     <!-- ========================== CLOSING ========================== -->
     <section class="section closing center" aria-labelledby="closing-title">
       <div class="container container--narrow">
-        <h2 id="closing-title" class="closing__title">До встречи!<br>ваши Настя и Тима <span class="heart">❤</span></h2>
+        <h2 id="closing-title" class="closing__title">До встречи!<br>Ваши Настя и Тима <span class="heart">❤</span></h2>
         <figure class="framed-band reveal">
           <img src="assets/images/couple.jpg" alt="Настя и Тима, чёрно-белое фото в поле" width="800" height="461" loading="lazy" decoding="async">
         </figure>

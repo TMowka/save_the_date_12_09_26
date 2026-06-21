@@ -295,6 +295,7 @@ a { color: var(--accent-dark); }
   padding: 1.5rem 1rem;
   box-shadow: var(--shadow);
 }
+.calendar-cta { margin-top: 1.5rem; }
 .calendar__month {
   font-family: var(--font-body);
   font-size: 1.6rem;
@@ -613,6 +614,7 @@ fieldset.field { margin: 0 0 1.6rem; }
   animation: pop 0.4s ease;
 }
 .rsvp-success__mark { font-size: 3rem; line-height: 1; margin-bottom: 0.5rem; }
+.rsvp-success__again { margin-top: 1.5rem; }
 .rsvp-success h3 { font-size: 1.6rem; }
 @keyframes pop {
   from { opacity: 0; transform: scale(0.96); }
