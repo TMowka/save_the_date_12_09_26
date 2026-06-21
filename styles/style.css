@@ -523,6 +523,9 @@ a { color: var(--accent-dark); }
 /* =====================================================================
    RSVP FORM
    ===================================================================== */
+.rsvp-deadline { margin: 0.6rem 0 0; color: var(--accent-dark); font-size: 1rem; }
+.rsvp-deadline strong { color: var(--heading); white-space: nowrap; }
+
 .rsvp-form { margin-top: 2.5rem; }
 .field { margin-bottom: 1.6rem; border: 0; padding: 0; min-width: 0; }
 fieldset.field { margin: 0 0 1.6rem; }

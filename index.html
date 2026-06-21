@@ -263,6 +263,7 @@
     <section class="section rsvp" id="rsvp" aria-labelledby="rsvp-title">
       <div class="container container--narrow">
         <h2 id="rsvp-title" class="section-title center">Анкета для гостя</h2>
+        <p class="rsvp-deadline center">Будем благодарны, если заполните анкету до <strong>1 августа</strong> 🤍</p>
 
         <form class="rsvp-form" id="rsvp-form" novalidate data-state="idle">
           <!-- 1. Name -->
@@ -281,57 +282,60 @@
             <p class="field__error" data-error-for="attendance" hidden>Пожалуйста, выберите вариант.</p>
           </fieldset>
 
-          <!-- 3. Transfer -->
-          <fieldset class="field">
-            <legend>Нужен ли Вам трансфер?</legend>
-            <label class="choice"><input type="radio" name="transfer" value="Да"> Да</label>
-            <label class="choice"><input type="radio" name="transfer" value="Нет"> Нет</label>
-          </fieldset>
+          <!-- Fields 3–7 matter only if the guest attends — hidden until an attending option is selected -->
+          <div id="rsvp-attending">
+            <!-- 3. Transfer -->
+            <fieldset class="field">
+              <legend>Нужен ли Вам трансфер?</legend>
+              <label class="choice"><input type="radio" name="transfer" value="Да"> Да</label>
+              <label class="choice"><input type="radio" name="transfer" value="Нет"> Нет</label>
+            </fieldset>
 
-          <!-- 4. Menu -->
-          <fieldset class="field">
-            <legend>Ваши предпочтения по меню</legend>
-            <label class="choice"><input type="checkbox" name="menu" value="Мясо"> Мясо</label>
-            <label class="choice"><input type="checkbox" name="menu" value="Рыба"> Рыба</label>
-            <label class="choice"><input type="checkbox" name="menu" value="Вегетарианское/диетическое меню"> Вегетарианское / диетическое меню</label>
-            <label class="choice"><input type="checkbox" name="menu" value="Другое" data-reveals="menu-other"> Другое (укажите ниже)</label>
-          </fieldset>
-          <div class="field" data-conditional="menu-other">
-            <label for="menu-other">Ваш вариант (меню)</label>
-            <input type="text" id="menu-other" name="menu_other">
-          </div>
+            <!-- 4. Menu -->
+            <fieldset class="field">
+              <legend>Ваши предпочтения по меню</legend>
+              <label class="choice"><input type="checkbox" name="menu" value="Мясо"> Мясо</label>
+              <label class="choice"><input type="checkbox" name="menu" value="Рыба"> Рыба</label>
+              <label class="choice"><input type="checkbox" name="menu" value="Вегетарианское/диетическое меню"> Вегетарианское / диетическое меню</label>
+              <label class="choice"><input type="checkbox" name="menu" value="Другое" data-reveals="menu-other"> Другое (укажите ниже)</label>
+            </fieldset>
+            <div class="field" data-conditional="menu-other">
+              <label for="menu-other">Ваш вариант (меню)</label>
+              <input type="text" id="menu-other" name="menu_other">
+            </div>
 
-          <!-- 5. Allergy -->
-          <fieldset class="field">
-            <legend>Есть ли у вас аллергия на определённые продукты?</legend>
-            <label class="choice"><input type="radio" name="allergy" value="Нет"> Нет</label>
-            <label class="choice"><input type="radio" name="allergy" value="Да" data-reveals="allergy-text"> Да (укажите ниже)</label>
-          </fieldset>
-          <div class="field" data-conditional="allergy-text">
-            <label for="allergy-text">У меня есть аллергия на</label>
-            <input type="text" id="allergy-text" name="allergy_text">
-          </div>
+            <!-- 5. Allergy -->
+            <fieldset class="field">
+              <legend>Есть ли у вас аллергия на определённые продукты?</legend>
+              <label class="choice"><input type="radio" name="allergy" value="Нет"> Нет</label>
+              <label class="choice"><input type="radio" name="allergy" value="Да" data-reveals="allergy-text"> Да (укажите ниже)</label>
+            </fieldset>
+            <div class="field" data-conditional="allergy-text">
+              <label for="allergy-text">У меня есть аллергия на</label>
+              <input type="text" id="allergy-text" name="allergy_text">
+            </div>
 
-          <!-- 6. Drinks -->
-          <fieldset class="field">
-            <legend>Ваши предпочтения по напиткам</legend>
-            <label class="choice"><input type="checkbox" name="drinks" value="Шампанское"> Шампанское</label>
-            <label class="choice"><input type="checkbox" name="drinks" value="Вино красное п/сл"> Вино красное п/сладкое</label>
-            <label class="choice"><input type="checkbox" name="drinks" value="Вино красное п/сух"> Вино красное п/сухое</label>
-            <label class="choice"><input type="checkbox" name="drinks" value="Вино белое п/сл"> Вино белое п/сладкое</label>
-            <label class="choice"><input type="checkbox" name="drinks" value="Вино белое п/сух"> Вино белое п/сухое</label>
-            <label class="choice"><input type="checkbox" name="drinks" value="Крепкие напитки"> Крепкие напитки</label>
-            <label class="choice"><input type="checkbox" name="drinks" value="Другое" data-reveals="drinks-other"> Другое (укажите ниже)</label>
-          </fieldset>
-          <div class="field" data-conditional="drinks-other">
-            <label for="drinks-other">Ваш вариант (напитки)</label>
-            <input type="text" id="drinks-other" name="drinks_other">
-          </div>
+            <!-- 6. Drinks -->
+            <fieldset class="field">
+              <legend>Ваши предпочтения по напиткам</legend>
+              <label class="choice"><input type="checkbox" name="drinks" value="Шампанское"> Шампанское</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Вино красное п/сл"> Вино красное п/сладкое</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Вино красное п/сух"> Вино красное п/сухое</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Вино белое п/сл"> Вино белое п/сладкое</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Вино белое п/сух"> Вино белое п/сухое</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Крепкие напитки"> Крепкие напитки</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Другое" data-reveals="drinks-other"> Другое (укажите ниже)</label>
+            </fieldset>
+            <div class="field" data-conditional="drinks-other">
+              <label for="drinks-other">Ваш вариант (напитки)</label>
+              <input type="text" id="drinks-other" name="drinks_other">
+            </div>
 
-          <!-- 7. Notes -->
-          <div class="field">
-            <label for="wishes">Дополнительные пожелания</label>
-            <textarea id="wishes" name="wishes" rows="3"></textarea>
+            <!-- 7. Notes -->
+            <div class="field">
+              <label for="wishes">Дополнительные пожелания</label>
+              <textarea id="wishes" name="wishes" rows="3"></textarea>
+            </div>
           </div>
 
           <!-- Honeypot (anti-spam): hidden from humans -->

@@ -103,6 +103,33 @@
   }
 
   /* ---------------------------------------------------------------
+     3b. Attendance gate: the attending-only fields (transfer, menu,
+         allergy, drinks, wishes) stay hidden until the guest picks an
+         attending option; hidden again (and cleared) if they decline.
+     --------------------------------------------------------------- */
+  function initAttendanceToggle(form) {
+    var block = document.getElementById("rsvp-attending");
+    if (!block) return;
+    var DECLINE = "К сожалению, не смогу присутствовать";
+
+    function apply() {
+      var checked = form.querySelector('input[name="attendance"]:checked');
+      var attending = !!checked && checked.value !== DECLINE;
+      block.hidden = !attending;
+      if (attending) return;
+      // Hidden (nothing chosen yet, or declined): clear so no stale choices linger.
+      block.querySelectorAll('input[type="text"], textarea').forEach(function (el) { el.value = ""; });
+      block.querySelectorAll("input:checked").forEach(function (el) { el.checked = false; });
+      block.querySelectorAll("[data-conditional]").forEach(function (p) { p.hidden = true; });
+    }
+
+    form.addEventListener("change", function (e) {
+      if (e.target.name === "attendance") apply();
+    });
+    apply();
+  }
+
+  /* ---------------------------------------------------------------
      4. RSVP form: validation + idle → loading → success
      --------------------------------------------------------------- */
   function initRsvp() {
@@ -110,6 +137,7 @@
     if (!form) return;
 
     initConditionalFields(form);
+    initAttendanceToggle(form);
 
     var successPanel = document.getElementById("rsvp-success");
     var successName = document.getElementById("success-name");
